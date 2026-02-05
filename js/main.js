@@ -1,11 +1,10 @@
 const canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-//Obtiene las dimensiones de la pantalla actual
-const window_height = window.innerHeight;
-const window_width = window.innerWidth;
+// Volvemos a las dimensiones originales (Pantalla completa)
+const window_height = window.innerHeight/2;
+const window_width = window.innerWidth/2;
 
-//El canvas tiene las mismas dimensiones que la pantalla
 canvas.height = window_height;
 canvas.width = window_width;
 
@@ -18,20 +17,24 @@ class Circle {
     this.radius = radius;
     this.color = color;
     this.text = text;
-
     this.speed = speed;
 
-    this.dx = 1 * this.speed;
-    this.dy = 1 * this.speed;
+    // --- CAMBIO: Dirección Aleatoria ---
+    // Generamos un número al azar: si es menor a 0.5, la dirección es negativa (-1), si no, positiva (1).
+    let directionX = Math.random() < 0.5 ? -1 : 1;
+    let directionY = Math.random() < 0.5 ? -1 : 1;
+
+    this.dx = directionX * this.speed;
+    this.dy = directionY * this.speed;
   }
 
   draw(context) {
     context.beginPath();
-
     context.strokeStyle = this.color;
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.font = "20px Arial";
+    context.fillStyle = this.color; // Color del texto igual al borde
     context.fillText(this.text, this.posX, this.posY);
 
     context.lineWidth = 2;
@@ -41,27 +44,15 @@ class Circle {
   }
 
   update(context) {
-    //context.clearRect(0, 0, window_width, window_height);
-
     this.draw(context);
 
-    //Si el círculo supera el margen derecho entonces se mueve a la izquierda
-    if (this.posX + this.radius > window_width) {
+    // Rebote derecha e izquierda
+    if (this.posX + this.radius > window_width || this.posX - this.radius < 0) {
       this.dx = -this.dx;
     }
 
-    //Si el círculo supera el margen izquierdo entonces se mueve a la derecha
-    if (this.posX - this.radius < 0) {
-      this.dx = -this.dx;
-    }
-
-    //Si el círculo supera el margen superior entonces se mueve hacia abajo
-    if (this.posY - this.radius < 0) {
-      this.dy = -this.dy;
-    }
-
-    //Si el círculo supera el margen inferior entonces se mueve hacia arriba
-    if (this.posY + this.radius > window_height) {
+    // Rebote arriba y abajo
+    if (this.posY + this.radius > window_height || this.posY - this.radius < 0) {
       this.dy = -this.dy;
     }
 
@@ -70,31 +61,26 @@ class Circle {
   }
 }
 
-/* let arrayCircle=[];
+// Función auxiliar para que no nazcan pegados al borde (mantiene la corrección anterior)
+function randomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
-for(let i=0; i<10;i++){
+// --- Generación de Círculos ---
 
-    let randomX =  Math.random()* window_width;
-    let randomY =  Math.random()* window_height;
-    let randomRadius = Math.floor(Math.random()*100 + 30);
+// Círculo 1
+let r1 = Math.floor(Math.random() * 50 + 30);
+let x1 = randomInRange(r1, window_width - r1);
+let y1 = randomInRange(r1, window_height - r1);
+let miCirculo = new Circle(x1, y1, r1, "blue", "Tec1", 5);
 
-    let miCirculo = new Circle(randomX, randomY, randomRadius, 'blue', i+1);
+// Círculo 2
+let r2 = Math.floor(Math.random() * 50 + 30);
+let x2 = randomInRange(r2, window_width - r2);
+let y2 = randomInRange(r2, window_height - r2);
+let miCirculo2 = new Circle(x2, y2, r2, "red", "Tec2", 2);
 
-    //Agrega el objeto al array
-    arrayCircle.push(miCirculo);
-    arrayCircle[i].draw(ctx);
-} */
-
-let randomX = Math.random() * window_width;
-let randomY = Math.random() * window_height;
-let randomRadius = Math.floor(Math.random() * 100 + 30);
-
-let miCirculo = new Circle(randomX, randomY, randomRadius, "blue", "Tec1", 5);
-miCirculo.draw(ctx);
-
-let miCirculo2 = new Circle(randomX, randomY, randomRadius, "red", "Tec2", 2);
-miCirculo2.draw(ctx);
-
+// Bucle de animación
 let updateCircle = function () {
   requestAnimationFrame(updateCircle);
   ctx.clearRect(0, 0, window_width, window_height);
@@ -103,4 +89,3 @@ let updateCircle = function () {
 };
 
 updateCircle();
-
