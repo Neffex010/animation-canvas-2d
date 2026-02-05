@@ -1,9 +1,9 @@
 const canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-// Volvemos a las dimensiones originales (Pantalla completa)
-const window_height = window.innerHeight/2;
-const window_width = window.innerWidth/2;
+// Dimensiones definidas por ti (mitad de la pantalla)
+const window_height = window.innerHeight / 2;
+const window_width = window.innerWidth / 2;
 
 canvas.height = window_height;
 canvas.width = window_width;
@@ -19,8 +19,7 @@ class Circle {
     this.text = text;
     this.speed = speed;
 
-    // --- CAMBIO: Dirección Aleatoria ---
-    // Generamos un número al azar: si es menor a 0.5, la dirección es negativa (-1), si no, positiva (1).
+    // Dirección Aleatoria (Positiva o Negativa)
     let directionX = Math.random() < 0.5 ? -1 : 1;
     let directionY = Math.random() < 0.5 ? -1 : 1;
 
@@ -34,7 +33,7 @@ class Circle {
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.font = "20px Arial";
-    context.fillStyle = this.color; // Color del texto igual al borde
+    context.fillStyle = this.color;
     context.fillText(this.text, this.posX, this.posY);
 
     context.lineWidth = 2;
@@ -61,31 +60,55 @@ class Circle {
   }
 }
 
-// Función auxiliar para que no nazcan pegados al borde (mantiene la corrección anterior)
+// Función auxiliar para generar posición segura dentro del canvas
 function randomInRange(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-// --- Generación de Círculos ---
+// Función auxiliar para color aleatorio (opcional, para que se vean distintos)
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
-// Círculo 1
-let r1 = Math.floor(Math.random() * 50 + 30);
-let x1 = randomInRange(r1, window_width - r1);
-let y1 = randomInRange(r1, window_height - r1);
-let miCirculo = new Circle(x1, y1, r1, "blue", "Tec1", 5);
+// --- Generación de Círculos (Array) ---
+let circles = []; 
+const maxCircles = 10;
 
-// Círculo 2
-let r2 = Math.floor(Math.random() * 50 + 30);
-let x2 = randomInRange(r2, window_width - r2);
-let y2 = randomInRange(r2, window_height - r2);
-let miCirculo2 = new Circle(x2, y2, r2, "red", "Tec2", 2);
+for (let i = 0; i < maxCircles; i++) {
+  // 1. Radio aleatorio entre 20 y 50
+  let radius = Math.floor(Math.random() * 30 + 20); 
+
+  // 2. Posición segura (para no quedar trabados en bordes)
+  let x = randomInRange(radius, window_width - radius);
+  let y = randomInRange(radius, window_height - radius);
+
+  // 3. Velocidad aleatoria entre 1 y 4
+  let speed = (Math.random() * 3) + 1;
+
+  // 4. Texto dinámico (Tec1, Tec2...)
+  let text = "Tec" + (i + 1);
+  
+  // 5. Color aleatorio
+  let color = getRandomColor();
+
+  // Crear y guardar en el arreglo
+  circles.push(new Circle(x, y, radius, color, text, speed));
+}
 
 // Bucle de animación
 let updateCircle = function () {
   requestAnimationFrame(updateCircle);
   ctx.clearRect(0, 0, window_width, window_height);
-  miCirculo.update(ctx);
-  miCirculo2.update(ctx);
+
+  // Recorremos el arreglo y actualizamos cada círculo
+  circles.forEach(circle => {
+    circle.update(ctx);
+  });
 };
 
 updateCircle();
