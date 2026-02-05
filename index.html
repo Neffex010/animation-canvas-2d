@@ -4,12 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="./img/favicon.png">
     <title>POO con Canvas</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+    </style>
 </head>
 
 <body>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" style="border:1px solid #000; display:block; margin-bottom: 20px; background: #ff8;"></canvas>
+
+    <div style="padding: 15px; background: #eee; border-radius: 8px; border: 1px solid #ccc;">
+        <div>
+            <label for="countRange">Círculos (0 - 50): <span id="countVal">10</span></label>
+            <br>
+            <input type="range" id="countRange" min="0" max="50" value="10" style="width: 300px;">
+        </div>
+        
+        <br>
+
+        <div>
+            <label for="widthRange">Ancho Canvas: <span id="widthVal"></span> px</label>
+            <br>
+            <input type="range" id="widthRange" min="200" max="1500" style="width: 300px;">
+        </div>
+
+        <br>
+
+        <div>
+            <label for="heightRange">Alto Canvas: <span id="heightVal"></span> px</label>
+            <br>
+            <input type="range" id="heightRange" min="200" max="1000" style="width: 300px;">
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>
