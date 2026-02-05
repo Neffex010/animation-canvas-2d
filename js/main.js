@@ -9,14 +9,26 @@ const labelCount = document.getElementById("countVal");
 const labelWidth = document.getElementById("widthVal");
 const labelHeight = document.getElementById("heightVal");
 
-// --- CONFIGURACIÓN INICIAL ---
-canvas.width = window.innerWidth * 0.8;
-canvas.height = 400;
+// --- CONFIGURACIÓN INICIAL (75% de la pantalla) ---
+// Calculamos el 75% del ancho y alto de la ventana
+const maxAllowedWidth = window.innerWidth * 0.75;
+const maxAllowedHeight = window.innerHeight * 0.75;
 
-sliderWidth.value = canvas.width;
-sliderHeight.value = canvas.height;
-labelWidth.innerText = Math.floor(canvas.width);
-labelHeight.innerText = canvas.height;
+// Aplicamos estas dimensiones al canvas
+canvas.width = maxAllowedWidth;
+canvas.height = maxAllowedHeight;
+
+// Ajustamos los sliders para que coincidan con este 75%
+sliderWidth.max = window.innerWidth; // El slider permite hasta el 100% si quisieras, o puedes poner maxAllowedWidth
+sliderWidth.value = maxAllowedWidth;
+
+sliderHeight.max = window.innerHeight;
+sliderHeight.value = maxAllowedHeight;
+
+// Actualizamos las etiquetas de texto
+labelWidth.innerText = Math.floor(maxAllowedWidth);
+labelHeight.innerText = Math.floor(maxAllowedHeight);
+
 
 // --- CLASE CIRCLE ---
 class Circle {
@@ -85,6 +97,8 @@ function createNewCircle(index) {
     
     let safeMaxX = canvas.width - radius;
     let safeMaxY = canvas.height - radius;
+    
+    // Validación de seguridad para pantallas muy pequeñas
     if (safeMaxX < radius) safeMaxX = radius;
     if (safeMaxY < radius) safeMaxY = radius;
 
@@ -98,15 +112,14 @@ function createNewCircle(index) {
     return new Circle(x, y, radius, color, text, speed);
 }
 
-// --- NUEVA FUNCIÓN: REPOSICIONAR CÍRCULOS ---
-// Si reducimos el canvas, esta función empuja los círculos hacia adentro
+// --- FUNCIÓN: REPOSICIONAR CÍRCULOS (Evita que se pierdan) ---
 function repositionCircles() {
     circles.forEach(circle => {
-        // Si el círculo se quedó fuera a la derecha
+        // Si el círculo quedó fuera a la derecha
         if (circle.posX + circle.radius > canvas.width) {
             circle.posX = canvas.width - circle.radius;
         }
-        // Si el círculo se quedó fuera abajo
+        // Si el círculo quedó fuera abajo
         if (circle.posY + circle.radius > canvas.height) {
             circle.posY = canvas.height - circle.radius;
         }
@@ -139,15 +152,13 @@ sliderCount.addEventListener("input", function() {
 sliderWidth.addEventListener("input", function() {
     canvas.width = parseInt(this.value);
     labelWidth.innerText = this.value;
-    // Llamamos a la corrección al cambiar el ancho
-    repositionCircles(); 
+    repositionCircles(); // Mantiene los círculos dentro
 });
 
 sliderHeight.addEventListener("input", function() {
     canvas.height = parseInt(this.value);
     labelHeight.innerText = this.value;
-    // Llamamos a la corrección al cambiar el alto
-    repositionCircles(); 
+    repositionCircles(); // Mantiene los círculos dentro
 });
 
 // --- ANIMACIÓN ---
