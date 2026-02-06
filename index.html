@@ -1,43 +1,84 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POO con Canvas</title>
-    <style>
-        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
-    </style>
+    <title>Canvas Pro Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
-    <canvas id="canvas" style="border:1px solid #000; display:block; margin-bottom: 20px; background: #ff8;"></canvas>
 
-    <div style="padding: 15px; background: #eee; border-radius: 8px; border: 1px solid #ccc;">
-        <div>
-            <label for="countRange">Círculos (0 - 50): <span id="countVal">10</span></label>
-            <br>
-            <input type="range" id="countRange" min="0" max="50" value="10" style="width: 300px;">
+    <header class="glass-header">
+        <div class="header-content">
+            <div class="brand">
+                <div class="logo">1.3 Introducción a las animaciones 2D</div>
+                <span class="version-badge">Canvas</span>
+            </div>
+            <p class="subtitle">Simulación interactiva de circulos</p>
         </div>
-        
-        <br>
+    </header>
 
-        <div>
-            <label for="widthRange">Ancho Canvas: <span id="widthVal"></span> px</label>
-            <br>
-            <input type="range" id="widthRange" min="200" max="1500" style="width: 300px;">
+    <main class="main-container">
+        <div class="canvas-wrapper">
+            <canvas id="canvas"></canvas>
         </div>
 
-        <br>
+        <div class="controls-card">
+            <div class="sliders-grid">
+                <div class="control-group">
+                    <label for="countRange">
+                        <span class="icon">🔵</span> Objetos
+                        <span class="badge" id="countVal">10</span>
+                    </label>
+                    <input type="range" id="countRange" min="0" max="50" value="10">
+                </div>
 
-        <div>
-            <label for="heightRange">Alto Canvas: <span id="heightVal"></span> px</label>
-            <br>
-            <input type="range" id="heightRange" min="200" max="1000" style="width: 300px;">
+                <div class="control-group">
+                    <label for="widthRange">
+                        <span class="icon">↔️</span> Ancho
+                        <span class="badge" id="widthVal"></span>
+                    </label>
+                    <input type="range" id="widthRange" min="200" max="1500">
+                </div>
+
+                <div class="control-group">
+                    <label for="heightRange">
+                        <span class="icon">↕️</span> Alto
+                        <span class="badge" id="heightVal"></span>
+                    </label>
+                    <input type="range" id="heightRange" min="200" max="1000">
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="btnReset" class="btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    Tamaño
+                </button>
+                <button id="btnCollision" class="btn-toggle">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path></svg>
+                    Colisión: OFF
+                </button>
+                <button id="btnReload" class="btn-danger">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    Recargar
+                </button>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <script src="js/main.js"></script>
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Desarrollo de soluciones en ambientes virtuales</p>
+            <div class="footer-links">
+                <a href="https://github.com/Neffex010/animation-canvas-2d" class="footer-link">GitHub</a>
+                
+            </div>
+            <p class="made-with">Hecho por Luis Enrique Cabrera Garcia con JavaScript y HTML5 Canvas</p>
+        </div>
+    </footer>
+
+    <script src="./js/main.js"></script>
 </body>
-
 </html>
